@@ -1,3 +1,4 @@
+
 package com.letscode.cookBook.view;
 
 import com.letscode.cookBook.controller.Catalogo;
@@ -9,7 +10,8 @@ import java.util.Scanner;
 public class CatalogoView {
     private final Receita NONE_FOUND = new Receita("Nenhuma receita encontrada", Categoria.PRATO_UNICO);
     private Receita receita;
-    Catalogo controller;
+    private NovaReceitaView novaReceita = new NovaReceitaView();
+    Catalogo controller = new Catalogo();
     private int curIndex = -1;
 
     private void showHeader() {
@@ -40,6 +42,20 @@ public class CatalogoView {
 
     private void add() {
         //TODO: Implement Add
+        this.receita = novaReceita.montarReceita();
+        this.controller.add(this.receita);
+        curIndex++;
+        show();
+    }
+
+    private void search() {
+        if(controller.getAllReceitas().size() == 0){
+            System.out.println("Não há nenhuma receita cadastrada! Utilize o comando + para adicionar sua 1ª receita.");
+        } else {
+            this.receita = new PesquisaReceitaNew().pesquisa(controller);
+            curIndex = controller.getAllReceitas().indexOf(this.receita);
+            show();
+        }
     }
 
     private void del() {
@@ -77,6 +93,7 @@ public class CatalogoView {
                     break;
                 case "S":
                     //TODO: Implement Search
+                    search();
                     break;
                 default:
                     ScreenUtil.printTextLine("Opção inválida", 80);
